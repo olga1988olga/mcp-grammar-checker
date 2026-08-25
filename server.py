@@ -3,17 +3,22 @@
 Wraps the public LanguageTool API (https://languagetool.org/) so an MCP
 client (e.g. Claude Code, Claude Desktop) can request a grammar/style
 check for a piece of text in a given language.
+
+Built with FastMCP 3.x (the `fastmcp` package by jlowin), per the
+recommendation from Anthropic's official mcp-server-dev:build-mcp-server
+skill — not the frozen FastMCP 1.0 bundled inside the official `mcp` SDK,
+which the first version of this server used directly.
 """
 
 import requests
-from mcp.server import MCPServer
+from fastmcp import FastMCP
 
 LANGUAGETOOL_API_URL = "https://api.languagetool.org/v2/check"
 
-mcp = MCPServer("grammar-checker")
+mcp = FastMCP("grammar-checker")
 
 
-@mcp.tool()
+@mcp.tool
 def check_grammar(text: str, language: str = "de-DE") -> str:
     """Check text for grammar, spelling, and style issues using LanguageTool.
 
